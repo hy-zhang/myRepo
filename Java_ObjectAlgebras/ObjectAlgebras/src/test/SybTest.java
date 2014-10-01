@@ -5,33 +5,34 @@ import generic.G_Company;
 import java.util.ArrayList;
 import java.util.List;
 
+import query.CombineSybAlg;
 import library.Pair;
 import monoid.DoubleMonoid;
-import monoid.StringDoublePairMonoid;
 import monoid.StringMonoid;
+import transform.SybIncSalary;
 import transform.SybAlgTransform;
 import transform.SybRename;
 import trees.SybAlg;
 
 public class SybTest {
 	static <Company, Dept, SubUnit, Employee, Person, Salary> Employee 
-		ralf(SybAlg<Company, Dept, SubUnit, Employee, Person, Salary> alg){
+		ralf(SybAlg<Company, Dept, SubUnit, Employee, Person, Salary> alg) {
 		return alg.E(alg.P("Ralf", "Amsterdam"), alg.S(8000.0));
 	}
 	static <Company, Dept, SubUnit, Employee, Person, Salary> Employee 
-		joost(SybAlg<Company, Dept, SubUnit, Employee, Person, Salary> alg){
+		joost(SybAlg<Company, Dept, SubUnit, Employee, Person, Salary> alg) {
 		return alg.E(alg.P("Joost", "Amsterdam"), alg.S(1000.0));
 	}
 	static <Company, Dept, SubUnit, Employee, Person, Salary> Employee 
-		marlow(SybAlg<Company, Dept, SubUnit, Employee, Person, Salary> alg){
+		marlow(SybAlg<Company, Dept, SubUnit, Employee, Person, Salary> alg) {
 		return alg.E(alg.P("Marlow", "Cambridge"), alg.S(2000.0));
 	}
 	static <Company, Dept, SubUnit, Employee, Person, Salary> Employee 
-		blair(SybAlg<Company, Dept, SubUnit, Employee, Person, Salary> alg){
+		blair(SybAlg<Company, Dept, SubUnit, Employee, Person, Salary> alg) {
 		return alg.E(alg.P("Blair", "London"), alg.S(100000.0));
 	}
 	static <Company, Dept, SubUnit, Employee, Person, Salary> Company 
-		genCom(SybAlg<Company, Dept, SubUnit, Employee, Person, Salary> alg){
+		genCom(SybAlg<Company, Dept, SubUnit, Employee, Person, Salary> alg) {
 		
 		List<SubUnit> s = (List<SubUnit>)new ArrayList<SubUnit>();
 		s.add(alg.PU(joost(alg)));
@@ -42,44 +43,26 @@ public class SybTest {
 		return alg.C(d);
 	
 	}
-	public static void main(String[] args){
-		/*StringQuerySybAlgebra stringQuerySybAlgebra = new StringQuerySybAlgebra(new StringMonoid());
-		System.out.println(genCom(stringQuerySybAlgebra));
+	public static void main(String[] args) {
+		StringQuerySybAlgebra sQuery = new StringQuerySybAlgebra(new StringMonoid());
+		DoubleQuerySybAlgebra dQuery = new DoubleQuerySybAlgebra(new DoubleMonoid());
 		
+		System.out.println("Result 1: (All names)\n\n" + genCom(sQuery) + "\n");
+		System.out.println("Result 2: (Total salary)\n\n" + genCom(dQuery) + "\n");
 		
-		SybAlgTransform sybAlgTransform = new SybAlgTransform(){};
-		G_Company gCom = genCom(sybAlgTransform);
-		G_Company gCom2 = gCom.accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){});
-		System.out.println(gCom2.accept(stringQuerySybAlgebra));
-		*/
+		SybAlgTransform transform = new SybAlgTransform(){};
+		G_Company gCom2 = genCom(transform).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){});
+		G_Company gCom3 = genCom(transform).accept(new SybIncSalary(){});
 		
-		StringMonoid stringMonoid = new StringMonoid();
-		DoubleMonoid doubleMonoid = new DoubleMonoid();
-		StringDoublePairMonoid sdpm = new StringDoublePairMonoid(stringMonoid, doubleMonoid);
-		StringDoublePairQuerySybAlgebra sdqm = new StringDoublePairQuerySybAlgebra(sdpm);
-		Pair<String, Double> result = genCom(sdqm);
-		System.out.println("Pair<String, Double>:\nString = (" + result.a() + ")\nDouble = (" + result.b() + ")");
+		System.out.println("Result 3: (Renaming)\n\n" + gCom2.accept(sQuery) + "\n");
+		System.out.println("Result 4: (Increasing salary)\n\n" + gCom3.accept(dQuery) + "\n");
 		
-		SybAlgTransform sybAlgTransform = new SybAlgTransform(){};
-		G_Company gCom = genCom(sybAlgTransform);
-		G_Company gCom2 = gCom.accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){});
-		Pair<String, Double> result2 = gCom2.accept(sdqm);
-		System.out.println("Pair<String, Double>:\nString = (" + result2.a() + ")\nDouble = (" + result2.b() + ")");
+		StringDoubleQuerySybAlgebra combine = new StringDoubleQuerySybAlgebra(sQuery, dQuery);
+		Pair<String, Double> result = genCom(combine);
+		System.out.println("Result 5: (All names, total salary)\n\nPair element1 = " + result.a() + "\nPair element2 = " + result.b() + "\n");
 		
-		StringQuerySybAlgebra sqsa0 = new StringQuerySybAlgebra(stringMonoid);
-		DoubleQuerySybAlgebra dqsa0 = new DoubleQuerySybAlgebra(doubleMonoid);
-		StringDoublePairQuerySybAlgebra2 sdqm2 = new StringDoublePairQuerySybAlgebra2(sqsa0, dqsa0);
-		Pair<String, Double> result3 = genCom(sdqm2);
-		System.out.println("Pair<String, Double>:\nString = (" + result3.a() + ")\nDouble = (" + result3.b() + ")");
-		
-		Pair<String, Double> result4 = gCom2.accept(sdqm2);
-		System.out.println("Pair<String, Double>:\nString = (" + result4.a() + ")\nDouble = (" + result4.b() + ")");
-		
-		StringQuerySybAlgebra2 sqsa1 = new StringQuerySybAlgebra2(stringMonoid); 
-		StringDoubleStringQuerySybAlgebra sdsqs = new StringDoubleStringQuerySybAlgebra(sdqm2, sqsa1);
-		Pair<Pair<String, Double>, String> result5 = genCom(sdsqs);
-		System.out.println("Pair<Pair<String, Double>, String>:\nString = (" + result5.a().a() + ")\nDouble = (" + result5.a().b() + ")\nString = (" + result5.b() + ")");
-		
-		
+		G_Company gCom4 = genCom(transform).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybIncSalary(){});
+		Pair<String, Double> result2 = gCom4.accept(combine);
+		System.out.println("Result 6: (Renaming, increasing salary)\n\nPair element1 = " + result2.a() + "\nPair element2 = " + result2.b() + "\n");
 	}
 }

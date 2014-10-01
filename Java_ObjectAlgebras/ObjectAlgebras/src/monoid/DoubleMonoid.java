@@ -1,7 +1,5 @@
 package monoid;
 
-import java.lang.Double;
-
 import library.Monoid;
 
 public class DoubleMonoid implements Monoid<Double>{

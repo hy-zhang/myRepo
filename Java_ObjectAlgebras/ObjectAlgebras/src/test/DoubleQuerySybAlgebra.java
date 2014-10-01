@@ -1,7 +1,5 @@
 package test;
 
-import java.lang.Double;
-
 import library.Monoid;
 import query.QuerySybAlg;
 
@@ -16,5 +14,5 @@ public class DoubleQuerySybAlgebra extends QuerySybAlg<Double> {
 	public Double S(double p0){
 		return p0;
 	}
-	
+
 }
