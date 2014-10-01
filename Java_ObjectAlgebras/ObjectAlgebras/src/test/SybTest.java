@@ -65,5 +65,21 @@ public class SybTest {
 		G_Company gCom2 = gCom.accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){});
 		Pair<String, Double> result2 = gCom2.accept(sdqm);
 		System.out.println("Pair<String, Double>:\nString = (" + result2.a() + ")\nDouble = (" + result2.b() + ")");
+		
+		StringQuerySybAlgebra sqsa0 = new StringQuerySybAlgebra(stringMonoid);
+		DoubleQuerySybAlgebra dqsa0 = new DoubleQuerySybAlgebra(doubleMonoid);
+		StringDoublePairQuerySybAlgebra2 sdqm2 = new StringDoublePairQuerySybAlgebra2(sqsa0, dqsa0);
+		Pair<String, Double> result3 = genCom(sdqm2);
+		System.out.println("Pair<String, Double>:\nString = (" + result3.a() + ")\nDouble = (" + result3.b() + ")");
+		
+		Pair<String, Double> result4 = gCom2.accept(sdqm2);
+		System.out.println("Pair<String, Double>:\nString = (" + result4.a() + ")\nDouble = (" + result4.b() + ")");
+		
+		StringQuerySybAlgebra2 sqsa1 = new StringQuerySybAlgebra2(stringMonoid); 
+		StringDoubleStringQuerySybAlgebra sdsqs = new StringDoubleStringQuerySybAlgebra(sdqm2, sqsa1);
+		Pair<Pair<String, Double>, String> result5 = genCom(sdsqs);
+		System.out.println("Pair<Pair<String, Double>, String>:\nString = (" + result5.a().a() + ")\nDouble = (" + result5.a().b() + ")\nString = (" + result5.b() + ")");
+		
+		
 	}
 }
