@@ -23,35 +23,35 @@ public class CombineSybAlg<A, B> extends QuerySybAlg<Pair<A, B>> {
 			l1.add(element.a());
 			l2.add(element.b());
 		}
-		return new Pair(l1, l2);
+		return new Pair<List<A>, List<B>>(l1, l2);
 	}
 
 	public Pair<A, B> C(List<Pair<A, B>> p0) {
-		return new Pair(q1.C(getPairList(p0).a()), q2.C(getPairList(p0).b()));
+		return new Pair<A, B>(q1.C(getPairList(p0).a()), q2.C(getPairList(p0).b()));
 	}
 
 	public Pair<A, B> D(java.lang.String p0, Pair<A, B> p1, List<Pair<A, B>> p2) {
-		return new Pair(q1.D(p0, p1.a(), getPairList(p2).a()), q2.D(p0, p1.b(), getPairList(p2).b()));
+		return new Pair<A, B>(q1.D(p0, p1.a(), getPairList(p2).a()), q2.D(p0, p1.b(), getPairList(p2).b()));
 	}
 
 	public Pair<A, B> DU(Pair<A, B> p0) {
-		return new Pair(q1.DU(p0.a()), q2.DU(p0.b()));
+		return new Pair<A, B>(q1.DU(p0.a()), q2.DU(p0.b()));
 	}
 
 	public Pair<A, B> E(Pair<A, B> p0, Pair<A, B> p1) {
-		return new Pair(q1.E(p0.a(), p1.a()), q2.E(p0.b(), p1.b()));
+		return new Pair<A, B>(q1.E(p0.a(), p1.a()), q2.E(p0.b(), p1.b()));
 	}
 
 	public Pair<A, B> P(java.lang.String p0, java.lang.String p1) {
-		return new Pair(q1.P(p0, p1), q2.P(p0, p1));
+		return new Pair<A, B>(q1.P(p0, p1), q2.P(p0, p1));
 	}
 
 	public Pair<A, B> PU(Pair<A, B> p0) {
-		return new Pair(q1.PU(p0.a()), q2.PU(p0.b()));
+		return new Pair<A, B>(q1.PU(p0.a()), q2.PU(p0.b()));
 	}
 
 	public Pair<A, B> S(double p0) {
-		return new Pair(q1.S(p0), q2.S(p0));
+		return new Pair<A, B>(q1.S(p0), q2.S(p0));
 	}
 
 }

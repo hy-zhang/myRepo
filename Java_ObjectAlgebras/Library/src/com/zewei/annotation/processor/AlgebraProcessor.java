@@ -1,7 +1,6 @@
 package com.zewei.annotation.processor;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -10,9 +9,6 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.JavaFileObject;
-
-import library.Pair;
-import library.PairMonoid;
 
 @SupportedAnnotationTypes(value={"com.zewei.annotation.processor.Algebra"})
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
@@ -175,7 +171,7 @@ public class AlgebraProcessor extends AbstractProcessor{
 				+ "\t\tList<A> l1 = (List<A>)new ArrayList<A>();\n"
 				+ "\t\tList<B> l2 = (List<B>)new ArrayList<B>();\n"
 				+ "\t\tfor (Pair<A, B> element : l) {\n\t\t\tl1.add(element.a());\n\t\t\tl2.add(element.b());\n\t\t}\n"
-				+ "\t\treturn new Pair(l1, l2);\n\t}\n\n";
+				+ "\t\treturn new Pair<List<A>, List<B>>(l1, l2);\n\t}\n\n";
 		List<? extends Element> le = element.getEnclosedElements();
 		for (Element e: le) {
 			String methodName = e.getSimpleName().toString();

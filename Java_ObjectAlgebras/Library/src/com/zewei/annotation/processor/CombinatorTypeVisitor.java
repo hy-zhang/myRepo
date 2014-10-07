@@ -20,7 +20,6 @@ public class CombinatorTypeVisitor implements TypeVisitor<String, String[]> {
 		String methodName = p[0];
 		String[] lTypeArgs = p[1].split(",");
 		List<? extends TypeMirror> lp = t.getParameterTypes();
-		String returnType = t.getReturnType().toString();
 		int flag;
 		
 		String res = "\tpublic Pair<A, B> " + methodName + "(";
@@ -51,7 +50,7 @@ public class CombinatorTypeVisitor implements TypeVisitor<String, String[]> {
 			}
 		}
 		
-		res += ") {\n\t\treturn new Pair(q1." + methodName + "(";
+		res += ") {\n\t\treturn new Pair<A, B>(q1." + methodName + "(";
 		res += resPart1;
 		res += "), q2." + methodName + "(";
 		res += resPart2;		

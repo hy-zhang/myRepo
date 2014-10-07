@@ -5,7 +5,6 @@ import generic.G_Company;
 import java.util.ArrayList;
 import java.util.List;
 
-import query.CombineSybAlg;
 import library.Pair;
 import monoid.DoubleMonoid;
 import monoid.StringMonoid;

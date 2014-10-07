@@ -11,11 +11,11 @@ public class PairMonoid<A, B> implements Monoid<Pair<A, B>> {
 
 	@Override
 	public Pair<A, B> join(Pair<A, B> x, Pair<A, B> y) {
-		return new Pair(m1.join(x.a(), y.a()), m2.join(x.b(), y.b()));
+		return new Pair<A, B>(m1.join(x.a(), y.a()), m2.join(x.b(), y.b()));
 	}
 
 	@Override
 	public Pair<A, B> empty() {
-		return new Pair(m1.empty(), m2.empty());
+		return new Pair<A, B>(m1.empty(), m2.empty());
 	}
 }
