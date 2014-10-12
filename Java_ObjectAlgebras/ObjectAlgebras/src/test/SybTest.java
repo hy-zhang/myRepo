@@ -1,10 +1,16 @@
 package test;
 
 import generic.G_Company;
+import generic.G_Dept;
+import generic.G_Employee;
+import generic.G_Person;
+import generic.G_Salary;
+import generic.G_SubUnit;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import query.CombineSybAlg;
 import library.Pair;
 import monoid.DoubleMonoid;
 import monoid.StringMonoid;
@@ -50,18 +56,30 @@ public class SybTest {
 		System.out.println("Result 2: (Total salary)\n\n" + genCom(dQuery) + "\n");
 		
 		SybAlgTransform transform = new SybAlgTransform(){};
-		G_Company gCom2 = genCom(transform).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){});
-		G_Company gCom3 = genCom(transform).accept(new SybIncSalary(){});
+		G_Company gComRename = genCom(transform).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){});
+		G_Company gComIncSalary = genCom(transform).accept(new SybIncSalary(){});
 		
-		System.out.println("Result 3: (Renaming)\n\n" + gCom2.accept(sQuery) + "\n");
-		System.out.println("Result 4: (Increasing salary)\n\n" + gCom3.accept(dQuery) + "\n");
+		System.out.println("Result 3: (Renaming)\n\n" + gComRename.accept(sQuery) + "\n");
+		System.out.println("Result 4: (Increasing salary)\n\n" + gComIncSalary.accept(dQuery) + "\n");
 		
-		StringDoubleQuerySybAlgebra combine = new StringDoubleQuerySybAlgebra(sQuery, dQuery);
-		Pair<String, Double> result = genCom(combine);
+		Pair<String, Double> result = genCom(
+				new CombineSybAlg<String, String, String, String, String, String, Double, Double, Double, Double, Double, Double>
+					(sQuery, dQuery)
+			);
 		System.out.println("Result 5: (All names, total salary)\n\nPair element1 = " + result.a() + "\nPair element2 = " + result.b() + "\n");
 		
-		G_Company gCom4 = genCom(transform).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybIncSalary(){});
-		Pair<String, Double> result2 = gCom4.accept(combine);
+		Pair<G_Company, G_Company> gComTrans = genCom(
+				new CombineSybAlg<G_Company, G_Dept, G_SubUnit, G_Employee, G_Person, G_Salary, G_Company, G_Dept, G_SubUnit, G_Employee, G_Person, G_Salary>
+					(transform, transform)
+			);
+		gComTrans = new Pair<G_Company, G_Company>(
+				gComTrans.a().accept(new SybRename(){}).accept(new SybRename(){}).accept(new SybRename(){}), 
+				gComTrans.b().accept(new SybIncSalary(){})
+			);
+		Pair<String, Double> result2 = new Pair<String, Double>(
+				gComTrans.a().accept(sQuery), 
+				gComTrans.b().accept(dQuery)
+			);
 		System.out.println("Result 6: (Renaming, increasing salary)\n\nPair element1 = " + result2.a() + "\nPair element2 = " + result2.b() + "\n");
 	}
 }
