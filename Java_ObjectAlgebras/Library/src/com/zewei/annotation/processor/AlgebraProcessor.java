@@ -172,7 +172,7 @@ public class AlgebraProcessor extends AbstractProcessor{
 				+ "import java.util.ArrayList;\n"
 				+ "import java.util.List;\n"
 				+ "import library.Pair;\n"
-				+ "import trees.SybAlg;\n\n"
+				+ "import " + element.getEnclosingElement().getSimpleName() + "." + element.getSimpleName() + ";\n\n"
 				+ "public class " + className + "<" + alg1 + ", " + alg2 + ">\n\timplements " + algName + "<";
 		for (int i = 0; i < typeNum; i++) {
 			if (i > 0) classContent += ", ";
