@@ -3,11 +3,12 @@ package com.zewei.annotation.processor;
 import java.util.List;
 import javax.lang.model.type.*;
 
-public class QueryExecutableTypeVisitor implements TypeVisitor<String, String[]>{
-	int arrayContains(String[] ls, String s){
+public class QueryExecutableTypeVisitor implements TypeVisitor<String, String[]> {
+	
+	int arrayContains(String[] ls, String s) {
 		int i = 0;
-		for (String ts: ls){
-			if (s.contains(ts)) return i;
+		for (String ts: ls) {
+			if (s.equals(ts)) return i;
 			i++;
 		}
 		return -1;
@@ -17,38 +18,49 @@ public class QueryExecutableTypeVisitor implements TypeVisitor<String, String[]>
 	public String visitExecutable(ExecutableType t, String[] p) {
 		String methodName = p[0];
 		String[] lTypeArgs = p[1].split(",");
+		String[] lListTypeArgs = new String[lTypeArgs.length];
+		for (int i = 0; i < lTypeArgs.length; ++i){
+			lListTypeArgs[i] = "java.util.List<" + lTypeArgs[i] + ">";
+		}
 		
 		List<? extends TypeMirror> lp = t.getParameterTypes();
 		String returnType = t.getReturnType().toString();
 		
 		String res = "\tpublic ";
 		
-		
-		int flag = arrayContains(lTypeArgs, returnType);
-		if (flag != -1 && returnType.contains("java.util.List"))	res += "java.util.List<R> ";
-		else if (flag != -1) res +=  " R ";
-		else res += returnType + " ";
+		if (arrayContains(lListTypeArgs, returnType) != -1){
+			res += "java.util.List<R> ";
+		} else if (arrayContains(lTypeArgs, returnType) != -1){
+			res += "R ";
+		} else res += returnType + " ";
 		
 		res += methodName + "(";
 		
 		
 		for (int i = 0; i < lp.size(); ++i){
-			flag = arrayContains(lTypeArgs, lp.get(i).toString());
-			if (flag != -1 && lp.get(i).toString().contains("java.util.List"))	res += "java.util.List<R> p" + i;
-			else if (flag != -1) res +=  "R p" + i;
-			else res += lp.get(i).toString() + " p" + i;
+			// contains a list of type variables
+			if (arrayContains(lListTypeArgs, lp.get(i).toString()) != -1){
+				res += "List<R> p" + i;
+			} else if (arrayContains(lTypeArgs, lp.get(i).toString()) != -1){
+				res += "R p" + i;
+			} else {
+				res += lp.get(i).toString() + " p" + i;
+			}
 			if (i < lp.size()-1) res += ", ";
 		}
 		
 		res += ") {\n";
 		res += "\t\tR res = m.empty();\n";
 		for (int i = 0; i < lp.size(); ++i){
-			flag = arrayContains(lTypeArgs, lp.get(i).toString());
-			if (flag != -1 && lp.get(i).toString().contains("java.util.List"))	res += "\t\tres = m.join(res, m.fold(p" + i + "));\n";
-			else if (flag != -1)	res += "\t\tres = m.join(res, p" + i + ");\n";
+			if (arrayContains(lListTypeArgs, lp.get(i).toString()) != -1){
+				res += "\t\tres = m.join(res, m.fold(p" + i + "));\n";
+			}
+			else if (arrayContains(lTypeArgs, lp.get(i).toString()) != -1){
+				res += "\t\tres = m.join(res, p" + i + ");\n";
+			}
 		}
 		res += "\t\treturn res;\n";
-		res += "\t}\n";
+		res += "\t}\n\n";
 		return res;
 	}
 
