@@ -1,8 +1,5 @@
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Target;
-import java.time.Clock;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.lang.annotation.*;
+import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
@@ -67,6 +64,8 @@ public class Lambdas {
 		System.out.println(new Date().toString()); // Java 7
 		System.out.println(Clock.systemUTC().instant()); // Java 8
 		System.out.println(LocalDate.now() + " " + LocalTime.now()); // Java 8
+		
+		/* Default & Static methods */
 		
 	}
 
