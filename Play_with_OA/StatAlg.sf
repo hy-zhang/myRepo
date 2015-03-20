@@ -1,0 +1,30 @@
+type StatAlg[E, S] = {
+  lit : Int -> E,
+  add : E -> E -> E,
+  seq : S -> S -> S,
+  asn : String -> E -> S
+};
+let printAlg : StatAlg[String, String] = {
+  lit = \(x : Int) -> x.toString(),
+  add = \(x : String) -> \(y : String) -> x.concat(" + ").concat(y),
+  seq = \(x : String) -> \(y : String) -> x.concat(" || ").concat(y),
+  asn = \(x : String) -> \(y : String) -> x.concat(" = ").concat(y)
+};
+let build [E, S] (alg : StatAlg[E, S]) : S =
+  alg.seq (alg.asn "x" (alg.add (alg.lit 2) (alg.lit 3))) (alg.asn "y" (alg.lit 1));
+build [String, String] printAlg
+
+{-
+algebra StatAlg where
+  sort : [E, S],
+  lit : Int -> E,
+  add : E -> E -> E,
+  seq : S -> S -> S,
+  asn : String -> E -> S;
+queryalg printAlg implements StatAlg where
+  sort : [String, String],
+  lit x -> x.toString(),
+  add x y -> x.concat(" + ").concat(y),
+  seq x y -> x.concat(" || ").concat(y),
+  asn x y -> x.concat(" = ").concat(y);
+-}
