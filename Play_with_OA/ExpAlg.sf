@@ -1,0 +1,30 @@
+type ExpAlg[E] = {
+  lit : Int -> E,
+  add : E -> E -> E
+};
+let evalAlg : ExpAlg[Int] = {
+  lit = \(x : Int) -> x,
+  add = \(x : Int) -> \(y : Int) -> x + y
+};
+let printAlg : ExpAlg[String] = {
+  lit = \(x : Int) -> x.toString(),
+  add = \(x : String) -> \(y : String) -> x.concat(" + ").concat(y)
+};
+let build [L] (alg : ExpAlg[L]) : L =
+  alg.add (alg.lit 2) (alg.lit 3);
+build [String] printAlg
+
+{-
+algebra ExpAlg where
+  sort : [E],
+  lit : Int -> E,
+  add : E -> E -> E;
+queryalg evalAlg implements ExpAlg where
+  sort : [Int],
+  lit x -> x,
+  add x y -> x + y;
+queryalg printAlg implements ExpAlg where
+  sort : [String],
+  lit x -> x.toString(),
+  add x y -> x.concat(" + ").concat(y);
+-}
