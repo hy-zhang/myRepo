@@ -1,0 +1,24 @@
+type IntList[L] = {
+  nil : L,
+  con : Int -> L -> L
+};
+type MList = { accept : forall L. IntList[L] -> L };
+let sumListAlg : IntList[Int] = {
+  nil = 0,
+  con = \(x : Int) -> \(y : Int) -> x + y
+};
+let incListAlg [L] (alg : IntList[L]) : IntList[L] = {
+  nil = alg.nil,
+  con = \(x : Int) -> \(y : L) -> alg.con (x + 1) y
+};
+let sumList (xs : MList) : Int = xs.accept [Int] sumListAlg;
+let incList (xs : MList) : MList = xs.accept [MList] {
+  nil = { accept = /\L -> \(x : IntList[L]) -> x.nil },
+  con = \(a : Int) -> \(b : MList) -> {
+    accept = /\L -> \(x : IntList[L]) -> x.con (a + 1) (b.accept [L] x)
+  }
+};
+let nil : MList = { accept = /\L -> \(x : IntList[L]) -> x.nil };
+let con (a : Int) (b : MList) = { accept = /\L -> \(x : IntList[L]) -> x.con a (b.accept [L] x)};
+let build : MList = con 2 (con 3 (con 4 nil));
+sumList (incList build)

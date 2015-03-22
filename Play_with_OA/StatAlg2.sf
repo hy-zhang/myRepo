@@ -1,0 +1,38 @@
+type ExpAlg[E] = {
+  lit : Int -> E,
+  add : E -> E -> E
+};
+let printExpAlg : ExpAlg[String] = {
+  lit = \(x : Int) -> x.toString(),
+  add = \(x : String) -> \(y : String) -> x.concat(" + ").concat(y)
+};
+type StatAlg[E, S] = (ExpAlg[E]) & {
+  seq : S -> S -> S,
+  asn : String -> E -> S
+};
+let printStatAlg : StatAlg[String, String] = (printExpAlg) ,, {
+  seq = \(x : String) -> \(y : String) -> x.concat(" || ").concat(y),
+  asn = \(x : String) -> \(y : String) -> x.concat(" = ").concat(y)
+};
+let build [E, S] (alg : StatAlg[E, S]) : S =
+  alg.seq (alg.asn "x" (alg.add (alg.lit 2) (alg.lit 3))) (alg.asn "y" (alg.lit 1));
+build [String, String] printStatAlg
+
+{-
+algebra ExpAlg where
+  sort : [E],
+  lit : Int -> E,
+  add : E -> E -> E;
+queryalg printExpAlg implements ExpAlg where
+  sort : [String],
+  lit x -> x.toString(),
+  add x y -> x.concat(" + ").concat(y);
+algebra StatAlg extends ExpAlg where
+  sort : [E, S] extends [E],
+  seq : S -> S -> S,
+  asn : String -> E -> S;
+queryalg printStatAlg extends printExpAlg implements StatAlg where
+  sort : [String, String],
+  seq = \(x : String) -> \(y : String) -> x.concat(" || ").concat(y),
+  asn = \(x : String) -> \(y : String) -> x.concat(" = ").concat(y);
+-}

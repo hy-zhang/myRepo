@@ -1,0 +1,30 @@
+type IntList[L] = {
+  nil : L,
+  con : Int -> L -> L
+};
+let incList [L] (alg : IntList[L]) : IntList[L] = {
+  nil = alg.nil,
+  con = \(x : Int) -> \(y : L) -> alg.con (x + 1) y
+};
+let sumList : IntList[Int] = {
+  nil = 0,
+  con = \(x : Int) -> \(y : Int) -> x + y
+};
+let build [L] (alg : IntList[L]) : L =
+  alg.con 2 (alg.con 3 (alg.con 4 (alg.nil)));
+build [Int] (incList [Int] sumList)
+
+{-
+algebra IntList where
+  sort : [L],
+  nil : L,
+  con : Int -> L -> L;
+queryalg sumList implements IntList where
+  sort : [Int],
+  nil -> 0,
+  con x y -> x + y;
+transalg incList implements IntList where
+  sort : [L],
+  nil -> nil,
+  con x y -> con (x + 1) y;
+-}
