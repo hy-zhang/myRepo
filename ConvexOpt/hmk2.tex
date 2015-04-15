@@ -247,9 +247,25 @@ Firstly with $y\gg\lambda x^2$, $\frac{\lambda x^2}{y}\rightarrow0$, and then le
 
 Hence any $\lambda\ge0$ is an optimal solution. $d^*=0$. The optimal duality gap is $p^*-d^*=1$.\\
 
-\textbf{(c).} Slater's condition doesn't hold for this problem, since with the constraint $y>0$, $x^2/y<0$ is not feasible. (??? Right?)\\
+\textbf{(c).} Slater's condition doesn't hold for this problem, since there is no strictly feasible point $(x,y)$ with $y>0$ satisfying that $x^2/y<0$.\\
 
-\textbf{(d).} ???
+\textbf{(d).} Now the perturbed problem is
+\begin{align*}
+\textrm{minimize }\hspace{.3in}&e^{-x}\\
+\textrm{subject to:}\hspace{.3in}&x^2/y\le u
+\end{align*}
+
+(1) If $u>0$, by setting $x\rightarrow\infty$, $y\rightarrow\infty$ and $x^2/y\rightarrow0$, the optimal value is $p^*(u)=0$.\\
+
+(2) If $u=0$, $p^*(0)=p^*=1$, from \textbf{(a)}.\\
+
+The Lagrange dual function of the perturbed problem is
+\[g(\lambda)=\inf_{x,y}\left(e^{-x}+\frac{\lambda x^2}{y}-\lambda u\right)=-\lambda u\]
+
+The constraint is $\lambda\ge0$. When $u>0$, to maximize $g(\lambda)$, the optimal point is $\lambda^*=0$.\\
+
+Hence when $u>0$, the global sensitivity inequality \[p^*(u)\ge p^*(0)-\lambda^*u\]
+becomes $0\ge1-0$, which doesn't hold for sure.
 
 \end{p}
 
