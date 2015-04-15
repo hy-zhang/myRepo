@@ -1,0 +1,266 @@
+\documentclass{article}
+\usepackage{amsmath,amsfonts,amsthm,amssymb}
+\usepackage{setspace}
+\usepackage{algorithm}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{indentfirst}
+\usepackage{extramarks}
+\usepackage{chngpage}
+\usepackage{algpseudocode}
+\usepackage{epsfig}
+\usepackage{soul,color}
+\usepackage{graphicx,float,wrapfig}
+\newcommand{\Class}{Convex Optimization}
+\newcommand{\ClassInstructor}{Chuan Wu}
+\newcommand{\ClassNumber}{COMP 9602}
+
+% Homework Specific Information. Change it to your own
+\newcommand{\Title}{Assignment 2}
+\newcommand{\DueDate}{April 17, 2015}
+\newcommand{\StudentName}{Haoyuan Zhang}
+\newcommand{\StudentClass}{}
+\newcommand{\StudentNumber}{3030030499}
+
+% In case you need to adjust margins:
+\topmargin=-0.45in      %
+\evensidemargin=0in     %
+\oddsidemargin=0in      %
+\textwidth=6.5in        %
+\textheight=9.0in       %
+\headsep=0.25in         %
+
+% Setup the header and footer
+\pagestyle{fancy}                                                       %
+\lhead{\StudentName}                                                 %
+\chead{\Class}  %
+\rhead{\firstxmark}                                                     %
+\lfoot{\lastxmark}                                                      %
+\cfoot{}                                                                %
+\rfoot{Page\ \thepage\ of\ \protect\pageref{LastPage}}                          %
+\renewcommand\headrulewidth{0.4pt}                                      %
+\renewcommand\footrulewidth{0.4pt}                                      %
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some tools
+\newcommand{\enterProblemHeader}[1]{\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak%
+                                    \nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak}%
+\newcommand{\exitProblemHeader}[1]{\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak%
+                                   \nobreak\extramarks{#1}{}\nobreak}%
+
+\newcommand{\homeworkProblemName}{}%
+\newcounter{homeworkProblemCounter}%
+\newenvironment{p}[1][Problem \arabic{homeworkProblemCounter}]%
+  {\stepcounter{homeworkProblemCounter}%
+   \renewcommand{\homeworkProblemName}{#1}%
+   \section*{\homeworkProblemName}%
+   \enterProblemHeader{\homeworkProblemName}}%
+  {\exitProblemHeader{\homeworkProblemName}}%
+
+\newcommand{\homeworkSectionName}{}%
+\newlength{\homeworkSectionLabelLength}{}%
+\newenvironment{s}[1]%
+  {% We put this space here to make sure we're not connected to the above.
+
+   \renewcommand{\homeworkSectionName}{#1}%
+   \settowidth{\homeworkSectionLabelLength}{\homeworkSectionName}%
+   \addtolength{\homeworkSectionLabelLength}{0.25in}%
+   \changetext{}{-\homeworkSectionLabelLength}{}{}{}%
+   \subsection*{\homeworkSectionName}%
+   \enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]}}%
+  {\enterProblemHeader{\homeworkProblemName}%
+
+   % We put the blank space above in order to make sure this margin
+   % change doesn't happen too soon.
+   \changetext{}{+\homeworkSectionLabelLength}{}{}{}}%
+
+\newcommand{\Answer}{\ \\\textbf{Answer:} }
+\newcommand{\todo}{\textbf{Proposition. } }
+\newcommand{\lemma}{\textbf{Lemma. } }
+\newcommand{\Acknowledgement}[1]{\ \\{\bf Acknowledgement:} #1}
+\newcommand{\dom}{\textbf{dom}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make title
+\title{\textmd{\bf \ClassNumber: \Title}\\{\large Instructed by \textit{\ClassInstructor}}\\\normalsize\vspace{0.1in}\small{Due\ on\ \DueDate}}
+\date{}
+\author{\textbf{\StudentName}\ \ \StudentClass\ \ \StudentNumber}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\begin{spacing}{1.1}
+\maketitle \thispagestyle{empty}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin edit from here
+
+\begin{p}[Problem 1]
+
+\textbf{(1).}
+\begin{proof}
+~\\
+
+\textbf{Necessity.} Suppose there exists a $v\ne0$ with $Av\preceq0$. Since $\dom f_0$ is nonempty, some $x_0\in\dom f_0$ exists such that $Ax_0\prec b$. Hence for any $\lambda>0$, \[A(x_0+\lambda v)\prec b\ \Longrightarrow\ x_0+\lambda v\in\dom f_0\]
+
+With the fact that $\lambda$ can be arbitrarily large, and $v\ne 0$, $\dom f_0$ is unbounded.\\
+
+\textbf{Sufficiency.} If $\dom f_0$ is unbounded, there is a sequence of vectors $\{x^k\}$ with $\|x^k\|_2\rightarrow\infty$ in $\dom f_0$. With each vector normalized we get a new sequence $\{v^k\}$, namely \[v^k=\frac{x^k}{\|x^k\|_2}\ \ \ (\forall k.\ \|v^k\|_2=1)\]
+
+Since it's bounded by unit vectors, by \textbf{Bolzano-Weierstrass theorem}, $\{v^k\}$ has a convergent subsequence. Denote $v$ as the limit.\\
+
+Since each $x^k\in\dom f_0$, $Ax^k\prec b$. So for all $i$, $a_i^Tx^k<b_i$. Hence \[a_i^Tv^k<\frac{b_i}{\|x^k\|_2}\rightarrow0\]
+
+Therefore the limit $v$ satisfies $Av\preceq0$, and sure $v\ne0$.
+
+\end{proof}
+
+\textbf{(2).}
+\begin{proof}
+~\\
+
+\textbf{Necessity.} Suppose there exists $v$ such that $Av\preceq0$, $Av\ne0$. For any $x$ in the domain of $f_0$, and for any $\lambda>0$,
+\[f_0(x+\lambda v)=-\sum_{i=1}^m\log(b_i-a_i^Tx-\lambda a_i^Tv)\]
+
+By the assumption, there exist some $i$s with $a_i^Tv<0$, while for others $a_i^Tv=0$. So in the equation above, each component is nondecreasing, and some can be arbitrarily large with respect to $\lambda$. Hence the result $f_0(x+\lambda v)$ is unbounded below.\\
+
+\textbf{Sufficiency.} If $f_0$ is unbounded below, there is a sequence of vectors $\{x^k\}$ with $f_0(x^k)\rightarrow-\infty$. Since $f_0$ is convex, by the 1st-order condition,
+\[f_0(x^k)\ge f_0(x^0)+(x^k-x^0)\sum_{i=1}^k\frac{a_i^T}{b_i-a_i^Tx^0}\]
+
+And since $b_i-a_i^Tx^0>0$, we conclude that $\min_ia_i^Tx^k\rightarrow-\infty$.\\
+
+Assume there exists some $z\succ0$ with $A^Tz=0$. On the one hand, since each $x^k$ satisfies $b-Ax^k\succ0$,
+\[ z^T(b-Ax^k)=\sum_iz_i^T(b_i-a_i^Tx^k)\ge\max_iz_i^T(b_i-a_i^Tx^k)\rightarrow\infty\]
+
+Note that it's because $z_i^T>0$, and $\min_ia_i^Tx^k\rightarrow-\infty$.\\
+
+Therefore $z^T(b-Ax^k)\rightarrow\infty$. On the other hand $z^TAx^k=0^Tx^k=0$, so $z^Tb\rightarrow\infty$, a contradiction derives.\\
+
+Thus no such $z$ exists. Hence there exists a $v$ with $Av\preceq0$, $Av\ne0$.
+
+\end{proof}
+
+\textbf{(3).} ??? (I don't think this is correct if $A$ is not full-rank.)\\
+
+\textbf{(4).}
+\begin{proof}
+~\\
+
+\textbf{Sufficiency.} Since we have \[f_0(x^*+v)=-\sum_{i=1}^m\log(b_i-a_i^Tx^*-a_i^Tv)\]
+
+If $Av=0$, it is obvious that $f_0(x^*+v)=f_0(x^*)$. So $Av=0$ is a sufficient condition for optimal set.\\
+
+\textbf{Necessity.} ??? (How to prove it?)
+
+\end{proof}
+
+
+\end{p}
+
+\begin{p}[Problem 2]
+
+\end{p}
+
+\begin{p}[Problem 3]
+
+\end{p}
+
+\begin{p}[Problem 4]
+
+The primal problem is
+\begin{align*}
+\textrm{minimize }\hspace{.3in}&\frac{1}{2}\|x-a\|_2^2\\
+\textrm{subject to:}\hspace{.3in}&\|x\|_1\le1
+\end{align*}
+
+The Lagrangian function $L(x,\lambda)$ is: ($\lambda\ge0$)
+\begin{align*}
+L(x,\lambda)&=\frac{1}{2}\|x-a\|_2^2+\lambda(\|x\|_1-1)\\
+&=\sum_{i=1}^n\left(\frac{1}{2}(x_i-a_i)^2+\lambda|x_i|\right)-\lambda
+\end{align*}
+
+Since the Lagrange dual function \[g(\lambda)=\inf_xL(x,\lambda)=\sum_ih_i(\lambda)-\lambda\]
+where the function $h_i(\lambda)$ is as follows:
+\[h_i(\lambda)=\inf_{x_i}
+\left\{
+\begin{array}{ll}
+\frac{1}{2}(x_i-a_i)^2-\lambda x_i&,\ x_i\le0 \\
+\frac{1}{2}(x_i-a_i)^2+\lambda x_i&,\ x_i>0
+\end{array}
+\right.\]
+
+Two local optimal points $x_-^*=a_i+\lambda$, $x_+^*=a_i-\lambda$.\\
+
+(1) If $a_i\le-\lambda$, both $x_-^*$ and $x_+^*$ are non-positive, $x_i^*=x_-^*$, in which case
+\[h_i(\lambda)=\frac{1}{2}a_i^2-\frac{1}{2}(\lambda+a_i)^2=\lambda(-a_i-\frac{1}{2}\lambda)\]
+
+(2) If $|a_i|<\lambda$, $x_-^*$ is positive but $x_+^*$ is negative, hence $x_i^*=0$, in which case
+\[h_i(\lambda)=\frac{1}{2}a_i^2\]
+
+(3) If $a_i\ge\lambda$, both $x_-^*$ and $x_+^*$ are non-negative, $x_i^*=x_+^*$, in which case
+\[h_i(\lambda)=\frac{1}{2}a_i^2-\frac{1}{2}(\lambda-a_i)^2=\lambda(a_i-\frac{1}{2}\lambda)\]
+
+Therefore,
+\[h_i(\lambda)=
+\left\{
+\begin{array}{ll}
+\lambda(|a_i|-\frac{1}{2}\lambda)&,\ \lambda\le|a_i| \\
+\frac{1}{2}a_i^2&,\ \lambda>|a_i|
+\end{array}
+\right.\]
+
+Hence the dual problem is
+\begin{align*}
+\textrm{maximize }\hspace{.3in}&\sum_ih_i(\lambda)-\lambda\\
+\textrm{subject to:}\hspace{.3in}&\lambda\ge0
+\end{align*}
+
+??? (Q: How to solve it?) (A: Use derivative.)\\
+
+??? (Efficient algorithm?)
+
+\end{p}
+
+\begin{p}[Problem 5]
+
+\textbf{(a).} The primal problem over $\mathcal{D}=\{(x,y)~|~y>0\}$ is
+\begin{align*}
+\textrm{minimize }\hspace{.3in}&e^{-x}\\
+\textrm{subject to:}\hspace{.3in}&x^2/y\le0
+\end{align*}
+
+The domain is a convex set, and $e^{-x}$ is convex, for sure. And the function $g(x,y)=x^2/y$ is the perspective of $f(x)=x^2$, so it's also convex. Therefore it is a convex optimization problem.\\
+
+The constraints are satisfied only when $x=0$, in which case the value is optimal value, namely $p^*=1$.\\
+
+\textbf{(b).} The Lagrangian \[L(x,y,\lambda)=e^{-x}+\frac{\lambda x^2}{y}\]
+
+The Lagrange dual function \[g(\lambda)=\inf_{y>0,x}\left(e^{-x}+\frac{\lambda x^2}{y}\right)\]
+
+Firstly with $y\gg\lambda x^2$, $\frac{\lambda x^2}{y}\rightarrow0$, and then let $x\rightarrow\infty$, the dual problem is
+\begin{align*}
+\textrm{maximize }\hspace{.3in}&0\\
+\textrm{subject to:}\hspace{.3in}&\lambda\ge0
+\end{align*}
+
+Hence any $\lambda\ge0$ is an optimal solution. $d^*=0$. The optimal duality gap is $p^*-d^*=1$.\\
+
+\textbf{(c).} Slater's condition doesn't hold for this problem, since with the constraint $y>0$, $x^2/y<0$ is not feasible. (??? Right?)\\
+
+\textbf{(d).} ???
+
+\end{p}
+
+\begin{p}[Problem 6]
+
+\end{p}
+
+% End edit to here
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{spacing}
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
