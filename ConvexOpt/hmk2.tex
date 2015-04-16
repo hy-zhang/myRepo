@@ -99,7 +99,7 @@
 
 \begin{p}[Problem 1]
 
-\textbf{(1).}
+\textbf{(a).}
 \begin{proof}
 ~\\
 
@@ -117,7 +117,7 @@ Therefore the limit $v$ satisfies $Av\preceq0$, and sure $v\ne0$.
 
 \end{proof}
 
-\textbf{(2).}
+\textbf{(b).}
 \begin{proof}
 ~\\
 
@@ -142,9 +142,9 @@ Thus no such $z$ exists. Hence there exists a $v$ with $Av\preceq0$, $Av\ne0$.
 
 \end{proof}
 
-\textbf{(3).} ??? (I don't think this is correct if $A$ is not full-rank.)\\
-
-\textbf{(4).}
+\textbf{(c).} Honestly I don't think this proposition is correct. With the assumption that $f_0$ is bounded below, if $\dom f_0$ is bounded, surely the minimum can be attained. But by the conclusion of \textbf{(a)} and \textbf{(b)}, if there exists a $v\ne0$ with $Av=0$, potentially we can also have the $f_0$ bounded below while its domain is unbounded. In that case I don't know why the minimum is attained.\\
+ 
+\textbf{(d).}
 \begin{proof}
 ~\\
 
@@ -152,7 +152,7 @@ Thus no such $z$ exists. Hence there exists a $v$ with $Av\preceq0$, $Av\ne0$.
 
 If $Av=0$, it is obvious that $f_0(x^*+v)=f_0(x^*)$. So $Av=0$ is a sufficient condition for optimal set.\\
 
-\textbf{Necessity.} ??? (How to prove it?)
+\textbf{Necessity.} I don't know how to prove this direction.
 
 \end{proof}
 
@@ -217,9 +217,44 @@ Hence the dual problem is
 \textrm{subject to:}\hspace{.3in}&\lambda\ge0
 \end{align*}
 
-??? (Q: How to solve it?) (A: Use derivative.)\\
+Now it comes to a solution for the dual problem. The objective $g(\lambda)=\sum_ih_i(\lambda)-\lambda$ is a unary function, so we can calculate its derivative. And the optimal point $\lambda^*$ satisfies $g'(\lambda^*)=0$ if it is attained. Specifically, the derivative of $h_i(\lambda)$ is
+\[h'_i(\lambda)=
+\left\{
+\begin{array}{ll}
+|a_i|-\lambda&,\ \lambda\le|a_i| \\
+0&,\ \lambda>|a_i|
+\end{array}
+\right.\]
 
-??? (Efficient algorithm?)
+And $g'(\lambda)=\sum_ih'_i(\lambda)-1$. Note that every $h'_i(\lambda)$ is non-increasing, so $g'(\lambda)$ is also non-increasing. Also, $g'(0)=\|a\|_1-1$, and for $\lambda\ge\max_i|a_i|$, $g'(\lambda)=-1$. To find the solution to $g'(\lambda)=0$, we need to discuss the cases.\\
+
+(1) $\|a\|_1\le1$. In the primal problem, $x^*=a$ can optimize the primal objective and $p^*=0$.\\
+
+(2) $\|a\|_1>1$. As $g'(\lambda)$ is monotonic, the optimal point $\lambda^*\in[0,\max_i|a_i|]$. To be concise, we can assume that the sequence $\{|a_1|,|a_2|,\cdots,|a_n|\}$ is non-decreasing, namely $|a_1|\le|a_2|\le\cdots\le|a_n|$.
+
+\begin{itemize}
+\item $\lambda\in[0,|a_1|)$: \ \ \ \ \ \ \ \ \ $g'(\lambda)=|a_1|+|a_2|+\cdots+|a_n|-\lambda n-1$.
+\item $\cdots$
+\item $\lambda\in[|a_k|,|a_{k+1}|)$: \ \ $g'(\lambda)=|a_{k+1}|+\cdots+|a_n|-\lambda(n-k)-1$.
+\item $\cdots$
+\end{itemize}
+
+Hence to get the optimal point $\lambda^*$, we firstly find which interval it belongs to. We calculate each $g'(|a_i|)$ one by one.
+\begin{align*}
+g'(0)\ \ \ &=\|a\|_1-1\\
+g'(|a_1|)&=g'(0)-n(|a_1|-0)\\
+g'(|a_2|)&=g'(|a_1|)-(n-1)(|a_2|-|a_1|)\\
+&\cdots\\
+g'(|a_k|)&=g'(|a_{k-1}|)-(n+1-k)(|a_k|-|a_{k-1}|)\\
+&\cdots
+\end{align*}
+
+If $a_k\le\lambda\le a_{k+1}$ for some $k$, we have \[g'(\lambda^*)=|a_{k+1}|+\cdots+|a_n|-\lambda^*(n-k)-1=0\]
+\[\lambda^*=\frac{\sum_{i=k+1}^n|a_i|-1}{n-k}\]
+
+Hence \[d^*=g(\lambda^*)=\frac{1}{2}\sum_{i=1}^ka_i^2+\lambda^*\sum_{i=k+1}^n|a_i|-\frac{1}{2}\lambda^{*^2}(n-k)-\lambda^*\]
+
+And hence we obtain the optimal value of the primal problem, namely $p^*=d^*$, since by Slater's condition, we can easily find a strictly feasible point $x$ with $\|x\|_1<1$, and hence strict duality holds.
 
 \end{p}
 
